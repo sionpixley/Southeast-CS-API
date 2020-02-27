@@ -1,0 +1,18 @@
+{
+    "project-name": "Southeast-CS-API",
+    "version": "v1.0.0",
+    "description": "API used by Southeast CS mobile app.",
+    "authors": [
+        "Sion Pixley",
+        "Jeffrey Smith",
+        "Fasih Rehman",
+        "Jaykumar Patel"
+    ],
+    "license": "proprietary",
+    "main-file": "./southeastcsapi/manage.py",
+    "dependencies": "requirements.txt",
+    "scripts": {
+        "run": "python3 ./southeastcsapi/manage.py runserver"
+    }
+}
+
