@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import announcement, event, article, contact
+from api.models import announcement, event, article, contact, admin
 
 class announcement_serializer(serializers.ModelSerializer):
     class Meta:
@@ -20,3 +20,8 @@ class contact_serializer(serializers.ModelSerializer):
     class Meta:
         model = contact
         fields = ("id", "name", "email", "phone", "office")
+
+class admin_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = admin
+        fields = ("id", "username", "passwd")

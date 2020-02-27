@@ -26,3 +26,8 @@ class contact(models.Model):
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=10)
     office = models.CharField(max_length=100)
+
+class admin(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=100)
+    passwd = models.CharField(max_length=400)
