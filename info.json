@@ -1,7 +1,7 @@
 {
     "project-name": "Southeast-CS-API",
     "version": "v1.0.0",
-    "description": "API used by Southeast CS mobile app.",
+    "description": "API used by Southeast CS mobile app and Southeast CS Admin Panel.",
     "authors": [
         "Sion Pixley",
         "Jeffrey Smith",
@@ -12,7 +12,7 @@
     "main-file": "./southeastcsapi/manage.py",
     "dependencies": "requirements.txt",
     "scripts": {
-        "run": "python3 ./southeastcsapi/manage.py runserver"
+        "start": "python3 ./southeastcsapi/manage.py runserver"
     }
 }
 
