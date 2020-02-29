@@ -6,6 +6,7 @@ from rest_framework import status
 from api.models import announcement, event, article, contact, admin
 from api.serializers import announcement_serializer, event_serializer, article_serializer, contact_serializer, admin_serializer
 
+
 @csrf_exempt
 def add_admin(request):
     if request.method != "POST":
