@@ -10,12 +10,12 @@ urlpatterns = [
     path("add-announcement/", views.add_announcement),
     path("get-announcement-by-id/<int:id>/", views.get_announcement_by_id),
     path("get-all-announcements/", views.get_all_announcements),
-    path("edit-announcement-by-id/<int:id>/<str:field>/", views.edit_announcement_by_id),
+    path("edit-announcement-by-id/<int:id>/", views.edit_announcement_by_id),
     path("remove-announcement-by-id/<int:id>/", views.remove_announcement_by_id),
     path("add-event/", views.add_event),
     path("get-event-by-id/<int:id>/", views.get_event_by_id),
     path("get-all-events/", views.get_all_events),
-    path("edit-event-by-id/<int:id>/<str:field>/", views.edit_event_by_id),
+    path("edit-event-by-id/<int:id>/", views.edit_event_by_id),
     path("remove-event-by-id/<int:id>/", views.remove_event_by_id)
 ]
 

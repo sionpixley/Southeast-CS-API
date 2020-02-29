@@ -25,6 +25,8 @@ def add_admin(request):
             return HttpResponse(status=status.HTTP_201_CREATED, reason="New admin created.")
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def validate_admin(request):
@@ -35,9 +37,11 @@ def validate_admin(request):
 
     try:
         check_admin = admin.objects.get(username=admin_dict["username"], passwd=admin_dict["passwd"])
-        return HttpResponse(status=status.HTTP_200_OK, reason="Admin exists and their password is correct.")
+        return HttpResponse(status=status.HTTP_200_OK, reason="Login successful.")
     except admin.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Admin doesn't exist or password is incorrect.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def get_all_admins(request):
@@ -69,6 +73,8 @@ def add_announcement(request):
             return HttpResponse(status=status.HTTP_201_CREATED, reason="New announcement created.")
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def get_announcement_by_id(request, id):
@@ -92,33 +98,24 @@ def get_all_announcements(request):
     return JsonResponse(announcements_dict.data, safe=False)
 
 @csrf_exempt
-def edit_announcement_by_id(request, id, field):
+def edit_announcement_by_id(request, id):
     if request.method != "PATCH":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
-    elif field == "id":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Cannot edit the id field.")
 
     announcement_dict = JSONParser().parse(request)
 
     try:
         check_announcement = announcement.objects.get(id=id)
-        if field == "author":
-            check_announcement.author = announcement_dict["author"]
-            check_announcement.save()
-        elif field == "authored_date":
-            check_announcement.authored_date = announcement_dict["authored_date"]
-            check_announcement.save()
-        elif field == "subject":
-            check_announcement.heading = announcement_dict["subject"]
-            check_announcement.save()
-        elif field == "description":
-            check_announcement.info = announcement_dict["description"]
-            check_announcement.save()
-        else:
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must enter a valid field.")
+        check_announcement.author = announcement_dict["author"]
+        check_announcement.authored_date = announcement_dict["authored_date"]
+        check_announcement.description = announcement_dict["description"]
+        check_announcement.subject = announcement_dict["subject"]
+        check_announcement.save()
         return HttpResponse(status=status.HTTP_200_OK, reason="Announcement updated.")
     except announcement.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Announcement does not exist.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def remove_announcement_by_id(request, id):
@@ -152,7 +149,9 @@ def add_event(request):
             new_event.save()
             return HttpResponse(status=status.HTTP_201_CREATED, reason="New event created.")
         else:
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in valid form.")
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def get_event_by_id(request, id):
@@ -176,36 +175,25 @@ def get_all_events(request):
     return JsonResponse(events_dict.data, safe=False)
 
 @csrf_exempt
-def edit_event_by_id(request, id, field):
+def edit_event_by_id(request, id):
     if request.method != "PATCH":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
-    elif field == "id":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Cannot edit id field.")
 
     event_dict = JSONParser().parse(request)
 
     try:
         check_event = event.objects.get(id=id)
-        if field == "date":
-            check_event.date = event_dict["date"]
-            check_event.save()
-        elif field == "location":
-            check_event.location = event_dict["location"]
-            check_event.save()
-        elif field == "name":
-            check_event.name = event_dict["name"]
-            check_event.save()
-        elif field == "description":
-            check_event.description = event_dict["description"]
-            check_event.save()
-        elif field == "organization":
-            check_event.organization = event_dict["organization"]
-            check_event.save()
-        else:
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must enter valid field.")
+        check_event.date = event_dict["date"]
+        check_event.description = event_dict["description"]
+        check_event.location = event_dict["location"]
+        check_event.name = event_dict["name"]
+        check_event.organization = event_dict["organization"]
+        check_event.save()
         return HttpResponse(status=status.HTTP_200_OK, reason="Event updated.")
     except event.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Event does not exist.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
 def remove_event_by_id(request, id):
