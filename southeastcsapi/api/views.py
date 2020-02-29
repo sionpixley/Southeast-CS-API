@@ -61,8 +61,8 @@ def add_announcement(request):
         check_announcement = announcement.objects.get(
             author=announcement_dict["author"],
             authored_date=announcement_dict["authored_date"],
-            heading=announcement_dict["heading"],
-            info=announcement_dict["info"]
+            subject=announcement_dict["subject"],
+            description=announcement_dict["description"]
         )
         return HttpResponse(status=status.HTTP_302_FOUND)
     except announcement.DoesNotExist:
@@ -109,11 +109,11 @@ def edit_announcement_by_id(request, id, field):
         elif field == "authored_date":
             check_announcement.authored_date = announcement_dict["authored_date"]
             check_announcement.save()
-        elif field == "heading":
-            check_announcement.heading = announcement_dict["heading"]
+        elif field == "subject":
+            check_announcement.heading = announcement_dict["subject"]
             check_announcement.save()
-        elif field == "info":
-            check_announcement.info = announcement_dict["info"]
+        elif field == "description":
+            check_announcement.info = announcement_dict["description"]
             check_announcement.save()
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

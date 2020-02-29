@@ -5,8 +5,8 @@ class announcement(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=100)
     authored_date = models.DateTimeField()
-    heading = models.CharField(max_length=100)
-    info = models.CharField(max_length=400)
+    subject = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
 
 
 class event(models.Model):
@@ -14,14 +14,14 @@ class event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
-    info = models.CharField(max_length=400)
+    description = models.CharField(max_length=400)
     organization = models.CharField(max_length=100)
 
 
 class article(models.Model):
     id = models.AutoField(primary_key=True)
-    heading = models.CharField(max_length=100)
-    info = models.CharField(max_length=400)
+    subject = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
 
 
 class contact(models.Model):
