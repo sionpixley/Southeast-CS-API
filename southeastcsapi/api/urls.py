@@ -11,7 +11,7 @@ urlpatterns = [
     path("get-announcement-by-id/<int:id>/", views.get_announcement_by_id),
     path("get-all-announcements/", views.get_all_announcements),
     path("edit-announcement-by-id/<int:id>/<str:field>/", views.edit_announcement_by_id),
-    path("delete-announcement-by-id/<int:id>/", views.delete_announcement_by_id)
+    path("remove-announcement-by-id/<int:id>/", views.remove_announcement_by_id)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

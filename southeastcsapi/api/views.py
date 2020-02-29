@@ -122,7 +122,7 @@ def edit_announcement_by_id(request, id, field):
         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
 @csrf_exempt
-def delete_announcement_by_id(request, id):
+def remove_announcement_by_id(request, id):
     if request.method != "DELETE":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
