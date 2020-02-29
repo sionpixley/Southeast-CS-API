@@ -4,8 +4,14 @@ import api.views as views
 
 
 urlpatterns = [
-    path("add-admin/", views.add_admin),
-    path("get-all-admins/", views.get_all_admins)
+    #path("add-admin/", views.add_admin),
+    path("validate-admin/", views.validate_admin),
+    path("get-all-admins/", views.get_all_admins),
+    path("add-announcement/", views.add_announcement),
+    path("get-announcement-by-id/<int:id>/", views.get_announcement_by_id),
+    path("get-all-announcements/", views.get_all_announcements),
+    path("edit-announcement-by-id/<int:id>/<str:field>/", views.edit_announcement_by_id),
+    path("delete-announcement-by-id/<int:id>/", views.delete_announcement_by_id)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
