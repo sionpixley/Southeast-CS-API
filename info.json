@@ -5,12 +5,17 @@
     "authors": [
         "Sion Pixley",
         "Jeffrey Smith",
-        "Fasih Rehman",
+        "Fasih Ur Rehman",
         "Jaykumar Patel"
     ],
     "license": "proprietary",
     "main-file": "./southeastcsapi/manage.py",
-    "dependencies": "requirements.txt",
+    "dependencies": {
+        "django": "v3.x",
+        "djangorestframework": "v3.x",
+        "python": "v3.7.x"
+    },
+    "dev-dependencies": "requirements.txt",
     "scripts": {
         "start": "python3 ./southeastcsapi/manage.py runserver"
     }
