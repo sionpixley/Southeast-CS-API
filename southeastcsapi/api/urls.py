@@ -16,7 +16,12 @@ urlpatterns = [
     path("get-event-by-id/<int:id>/", views.get_event_by_id),
     path("get-all-events/", views.get_all_events),
     path("edit-event-by-id/<int:id>/", views.edit_event_by_id),
-    path("remove-event-by-id/<int:id>/", views.remove_event_by_id)
+    path("remove-event-by-id/<int:id>/", views.remove_event_by_id),
+    path("add-article/", views.add_article),
+    path("get-article-by-id/<int:id>/", views.get_article_by_id),
+    path("get-all-articles/", views.get_all_articles),
+    path("edit-article-by-id/<int:id>/", views.edit_article_by_id),
+    path("remove-article-by-id/<int:id>/", views.remove_article_by_id)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

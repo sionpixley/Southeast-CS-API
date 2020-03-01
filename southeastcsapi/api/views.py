@@ -93,7 +93,7 @@ def get_all_announcements(request):
     if request.method != "GET":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
 
-    check_announcements = announcement.objects.all().distinct()
+    check_announcements = announcement.objects.all().distinct().order_by("-authored_date")
     announcements_dict = announcement_serializer(check_announcements, many=True)
     return JsonResponse(announcements_dict.data, safe=False)
 
@@ -170,7 +170,7 @@ def get_all_events(request):
     if request.method != "GET":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
 
-    check_events = event.objects.all().distinct()
+    check_events = event.objects.all().distinct().order_by("-date")
     events_dict = event_serializer(check_events, many=True)
     return JsonResponse(events_dict.data, safe=False)
 
@@ -206,3 +206,74 @@ def remove_event_by_id(request, id):
         return HttpResponse(status=status.HTTP_200_OK, reason="Event removed from database.")
     except event.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Event does not exist.")
+
+@csrf_exempt
+def add_article(request):
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
+
+    article_dict = JSONParser().parse(request)
+
+    try:
+        check_article = article.objects.get(subject=article_dict["subject"])
+        return HttpResponse(status=status.HTTP_302_FOUND, reason="Article already exists.")
+    except article.DoesNotExist:
+        new_article = article_serializer(data=article_dict)
+        if new_article.is_valid():
+            new_article.save()
+            return HttpResponse(status=status.HTTP_201_CREATED, reason="New article created.")
+        else:
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+
+@csrf_exempt
+def get_article_by_id(request, id):
+    if request.method != "GET":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
+
+    try:
+        check_article = article.objects.get(id=id)
+        article_dict = article_serializer(check_article)
+        return JsonResponse(article_dict.data)
+    except article.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+
+@csrf_exempt
+def get_all_articles(request):
+    if request.method != "GET":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
+
+    check_articles = article.objects.all().distinct().order_by("subject")
+    articles_dict = article_serializer(check_articles, many=True)
+    return JsonResponse(articles_dict.data, safe=False)
+
+@csrf_exempt
+def edit_article_by_id(request, id):
+    if request.method != "PATCH":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+
+    article_dict = JSONParser().parse(request)
+
+    try:
+        check_article = article.objects.get(id=id)
+        check_article.subject = article_dict["subject"]
+        check_article.description = article_dict["description"]
+        check_article.save()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Article updated.")
+    except article.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+
+@csrf_exempt
+def remove_article_by_id(request, id):
+    if request.method != "DELETE":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use DELETE method.")
+
+    try:
+        check_article = article.objects.get(id=id)
+        check_article.delete()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Article removed from database.")
+    except article.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
