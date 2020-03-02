@@ -17,7 +17,7 @@ def add_admin(request):
 
     try:
         check_admin = admin.objects.get(username=admin_dict["username"])
-        return HttpResponse(status=status.HTTP_302_FOUND, reason="Admin account already exists")
+        return HttpResponse(status=status.HTTP_302_FOUND, reason="Admin account already exists.")
     except admin.DoesNotExist:
         new_admin = admin_serializer(data=admin_dict)
         if new_admin.is_valid():
@@ -277,3 +277,64 @@ def remove_article_by_id(request, id):
         return HttpResponse(status=status.HTTP_200_OK, reason="Article removed from database.")
     except article.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+
+@csrf_exempt
+def add_contact(request):
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
+
+    contact_dict = JSONParser().parse(request)
+
+    try:
+        check_contact = contact.objects.get(name=contact_dict["name"])
+        return HttpResponse(status=status.HTTP_302_FOUND, reason="Contact already exists.")
+    except contact.DoesNotExist:
+        new_contact = contact_serializer(data=contact_dict)
+        if new_contact.is_valid():
+            new_contact.save()
+            return HttpResponse(status=status.HTTP_201_CREATED, reason="New contact created.")
+        else:
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+
+@csrf_exempt
+def get_contact_by_id(request, id):
+    if request.method != "GET":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
+
+    try:
+        check_contact = contact.objects.get(id=id)
+        contact_dict = contact_serializer(check_contact)
+        return JsonResponse(contact_dict.data)
+    except contact.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Contact does not exist.")
+
+@csrf_exempt
+def get_all_contacts(request):
+    if request.method != "GET":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
+
+    check_contacts = contact.objects.all().distinct().order_by("name")
+    contacts_dict = contact_serializer(check_contacts, many=True)
+    return JsonResponse(contacts_dict.data, safe=False)
+
+@csrf_exempt
+def edit_contact_by_id(request, id):
+    if request.method != "PATCH":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+
+    contact_dict = JSONParser().parse(request)
+
+    try:
+        check_contact = contact.objects.get(id=id)
+        check_contact.name = contact_dict["name"]
+        check_contact.email = contact_dict["email"]
+        check_contact.phone = contact_dict["phone"]
+        check_contact.office = contact_dict["office"]
+        check_contact.save()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Contact updated.")
+    except contact.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Contact does not exist.")
+    except KeyError:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
