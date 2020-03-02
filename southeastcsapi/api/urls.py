@@ -25,7 +25,8 @@ urlpatterns = [
     path("add-contact/", views.add_contact),
     path("get-contact-by-id/<int:id>/", views.get_contact_by_id),
     path("get-all-contacts/", views.get_all_contacts),
-    path("edit-contact-by-id/<int:id>/", views.edit_contact_by_id)
+    path("edit-contact-by-id/<int:id>/", views.edit_contact_by_id),
+    path("remove-contact-by-id/<int:id>/", views.remove_contact_by_id)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -338,3 +338,15 @@ def edit_contact_by_id(request, id):
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Contact does not exist.")
     except KeyError:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
+
+@csrf_exempt
+def remove_contact_by_id(request, id):
+    if request.method != "DELETE":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use DELETE method.")
+
+    try:
+        check_contact = contact.objects.get(id=id)
+        check_contact.delete()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Contact removed from database.")
+    except contact.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Contact does not exist.")
