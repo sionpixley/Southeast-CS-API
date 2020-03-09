@@ -99,8 +99,8 @@ def get_all_announcements(request):
 
 @csrf_exempt
 def edit_announcement_by_id(request, id):
-    if request.method != "PATCH":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
     announcement_dict = JSONParser().parse(request)
 
@@ -176,8 +176,8 @@ def get_all_events(request):
 
 @csrf_exempt
 def edit_event_by_id(request, id):
-    if request.method != "PATCH":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
     event_dict = JSONParser().parse(request)
 
@@ -250,8 +250,8 @@ def get_all_articles(request):
 
 @csrf_exempt
 def edit_article_by_id(request, id):
-    if request.method != "PATCH":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
     article_dict = JSONParser().parse(request)
 
@@ -321,8 +321,8 @@ def get_all_contacts(request):
 
 @csrf_exempt
 def edit_contact_by_id(request, id):
-    if request.method != "PATCH":
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use PATCH method.")
+    if request.method != "POST":
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
     contact_dict = JSONParser().parse(request)
 
