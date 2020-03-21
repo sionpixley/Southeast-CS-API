@@ -3,8 +3,8 @@ from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework import status
-from api.models import announcement, event, article, contact, admin
-from api.serializers import announcement_serializer, event_serializer, article_serializer
+from api.models import announcement, event, course, contact, admin
+from api.serializers import announcement_serializer, event_serializer, course_serializer
 from api.serializers import contact_serializer, admin_serializer
 
 
@@ -208,75 +208,79 @@ def remove_event_by_id(request, id):
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Event does not exist.")
 
 @csrf_exempt
-def add_article(request):
+def add_course(request):
     if request.method != "POST":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
-    article_dict = JSONParser().parse(request)
+    course_dict = JSONParser().parse(request)
 
     try:
-        check_article = article.objects.get(subject=article_dict["subject"])
-        return HttpResponse(status=status.HTTP_302_FOUND, reason="Article already exists.")
-    except article.DoesNotExist:
-        new_article = article_serializer(data=article_dict)
-        if new_article.is_valid():
-            new_article.save()
-            return HttpResponse(status=status.HTTP_201_CREATED, reason="New article created.")
+        check_course = course.objects.get(subject=course_dict["number"])
+        return HttpResponse(status=status.HTTP_302_FOUND, reason="Course already exists.")
+    except course.DoesNotExist:
+        new_course = course_serializer(data=course_dict)
+        if new_course.is_valid():
+            new_course.save()
+            return HttpResponse(status=status.HTTP_201_CREATED, reason="New course created.")
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
     except KeyError:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
-def get_article_by_id(request, id):
+def get_course_by_id(request, id):
     if request.method != "GET":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
 
     try:
-        check_article = article.objects.get(id=id)
-        article_dict = article_serializer(check_article)
-        return JsonResponse(article_dict.data)
-    except article.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+        check_course = course.objects.get(id=id)
+        course_dict = course_serializer(check_course)
+        return JsonResponse(course_dict.data)
+    except course.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Course does not exist.")
 
 @csrf_exempt
-def get_all_articles(request):
+def get_all_courses(request):
     if request.method != "GET":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
 
-    check_articles = article.objects.all().distinct().order_by("subject")
-    articles_dict = article_serializer(check_articles, many=True)
-    return JsonResponse(articles_dict.data, safe=False)
+    check_courses = course.objects.all().distinct().order_by("subject")
+    courses_dict = course_serializer(check_courses, many=True)
+    return JsonResponse(courses_dict.data, safe=False)
 
 @csrf_exempt
-def edit_article_by_id(request, id):
+def edit_course_by_id(request, id):
     if request.method != "POST":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use POST method.")
 
-    article_dict = JSONParser().parse(request)
+    course_dict = JSONParser().parse(request)
 
     try:
-        check_article = article.objects.get(id=id)
-        check_article.subject = article_dict["subject"]
-        check_article.description = article_dict["description"]
-        check_article.save()
-        return HttpResponse(status=status.HTTP_200_OK, reason="Article updated.")
-    except article.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+        check_course = course.objects.get(id=id)
+        check_course.name = course_dict["name"]
+        check_course.number = course_dict["number"]
+        check_course.credits = course_dict["credits"]
+        check_course.prerequisites = course_dict["prerequisites"]
+        check_course.availability = course_dict["availability"]
+        check_course.description = course_dict["description"]
+        check_course.save()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Course updated.")
+    except course.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Course does not exist.")
     except KeyError:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Object was not in a valid form.")
 
 @csrf_exempt
-def remove_article_by_id(request, id):
+def remove_course_by_id(request, id):
     if request.method != "DELETE":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use DELETE method.")
 
     try:
-        check_article = article.objects.get(id=id)
-        check_article.delete()
-        return HttpResponse(status=status.HTTP_200_OK, reason="Article removed from database.")
-    except article.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Article does not exist.")
+        check_course = course.objects.get(id=id)
+        check_course.delete()
+        return HttpResponse(status=status.HTTP_200_OK, reason="Course removed from database.")
+    except course.DoesNotExist:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, reason="Course does not exist.")
 
 @csrf_exempt
 def add_contact(request):

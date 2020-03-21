@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import announcement, event, article, contact, admin
+from api.models import announcement, event, course, contact, admin
 
 
 class announcement_serializer(serializers.ModelSerializer):
@@ -14,10 +14,10 @@ class event_serializer(serializers.ModelSerializer):
         fields = ("id", "date", "location", "name", "description", "organization")
 
 
-class article_serializer(serializers.ModelSerializer):
+class course_serializer(serializers.ModelSerializer):
     class Meta:
-        model = article
-        fields = ("id", "subject", "description")
+        model = course
+        fields = ("id", "name", "number", "credits", "prerequisites", "availability", "description")
 
 
 class contact_serializer(serializers.ModelSerializer):
