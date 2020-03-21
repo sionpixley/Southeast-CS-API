@@ -18,9 +18,13 @@ class event(models.Model):
     organization = models.CharField(max_length=100)
 
 
-class article(models.Model):
+class course(models.Model):
     id = models.AutoField(primary_key=True)
-    subject = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    number = models.CharField(max_length=10, unique=True)
+    credits = models.IntegerField()
+    prerequisites = models.CharField(max_length=400)
+    availability = models.CharField(max_length=400)
     description = models.CharField(max_length=400)
 
 
