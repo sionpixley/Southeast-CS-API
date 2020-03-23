@@ -215,7 +215,7 @@ def add_course(request):
     course_dict = JSONParser().parse(request)
 
     try:
-        check_course = course.objects.get(subject=course_dict["number"])
+        check_course = course.objects.get(number=course_dict["number"])
         return HttpResponse(status=status.HTTP_302_FOUND, reason="Course already exists.")
     except course.DoesNotExist:
         new_course = course_serializer(data=course_dict)
@@ -244,7 +244,7 @@ def get_all_courses(request):
     if request.method != "GET":
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST, reason="Must use GET method.")
 
-    check_courses = course.objects.all().distinct().order_by("subject")
+    check_courses = course.objects.all().distinct().order_by("number")
     courses_dict = course_serializer(check_courses, many=True)
     return JsonResponse(courses_dict.data, safe=False)
 
